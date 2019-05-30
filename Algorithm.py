@@ -42,16 +42,12 @@ def similarity(syn1,syn2):
     if not commonAncestor is "":
         depthLCS = commonAncestor.max_depth()
 
-    else:
-        depthLCS = -1
+        depth1 = syn1.max_depth()
+        depth2 = syn2.max_depth()
 
-    depth1 = syn1.max_depth()
-    depth2 = syn2.max_depth()
+        value = []
+        DEPTH_MAX = 18
 
-    value = []
-    DEPTH_MAX = 18
-
-    if not depthLCS == -1:
         length = depth1 + depth2 - 2 * depthLCS
 
         #Wu Palmer
@@ -63,10 +59,9 @@ def similarity(syn1,syn2):
         #LeakcockChodorow
         value.append(math.log2((length + 1) / 2 * (DEPTH_MAX + 1)))
 
-    return value
+        return value
 
 def findSimilarity(lemma1 , lemma2):
-
 
     synset1 = wn.synsets(lemma1,pos="n")
     synset2 = wn.synsets(lemma2,pos="n")
@@ -76,32 +71,27 @@ def findSimilarity(lemma1 , lemma2):
     for syn1 in synset1:
         for syn2 in synset2:
             values = similarity(syn1,syn2)
-            for v in range(len(values)):
-                if values[v] > maxvalue[v]:
-                    maxvalue[v] = values[v]
+            if not values is None:
+                for v in range(len(values)):
+                    if values[v] > maxvalue[v]:
+                        maxvalue[v] = values[v]
 
     return maxvalue
 
-
-
-
 def rankify(array):
 
-    newArray = []
-
+    newarray = []
+    
     for i in range(len(array)):
         minori, uguali = 1, 1
-
         for j in range(len(array)):
             if j != i and array[j] < array[i]:
                 minori += 1
             if j != i and array[j] == array[i]:
                 uguali += 1
 
-        newArray.append(minori + (uguali - 1) / 2)
-
-    return newArray
-
+        newarray.append(minori + (uguali - 1) / 2)
+    return newarray
 
 def pearson(array, target):
 
